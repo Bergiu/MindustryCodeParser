@@ -176,6 +176,7 @@ tokens = [
              'BOOL',
              'NEWLINE',
              'ID',
+             'COMMENT'
          ] + list(reserved.values())
 
 
@@ -191,8 +192,9 @@ t_BOOL = r'"(true|false)"'
 
 
 def t_COMMENT(t):
-    r'\#.*\n'
+    r'\#.*'
     t.lexer.lineno += 1
+    return t
 
 
 # A string containing ignored characters (spaces and tabs)
@@ -213,12 +215,14 @@ def t_INT(t):
 
 def t_NEWLINE(t):
     r'\n+'
-    t.lexer.lineno += len(t.value)
+    a = len(t.value)
+    t.lexer.lineno += a
     return t
 
 
 FILENAME = "<undefined>"
 LINT = False
+
 
 def setup(filename, lint):
     global FILENAME, LINT
