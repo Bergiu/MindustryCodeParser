@@ -1,4 +1,4 @@
-class ProgramNode:
+class CodeBlockNode:
     def __init__(self, line, prev_node=None):
         self.line = line
         self.prev_node = prev_node

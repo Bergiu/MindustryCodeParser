@@ -4,30 +4,27 @@ from .nodes import *
 
 
 def p_program1(p):
-    '''program : operation NEWLINE'''
-    p[0] = ProgramNode(p[1])
+    '''codeblock : operation NEWLINE'''
+    p[0] = CodeBlockNode(p[1])
 
 
 def p_program2(p):
-    '''program : program operation NEWLINE'''
-    p[0] = ProgramNode(p[2], p[1])
+    '''codeblock : codeblock operation NEWLINE'''
+    p[0] = CodeBlockNode(p[2], p[1])
 
 
 def p_write(p):
-    '''cmd_write : WRITE value fakeid var_int
-    '''
+    '''cmd_write : WRITE value fakeid var_int'''
     p[0] = OperationNode(p[1], p[2:])
 
 
 def p_read(p):
-    '''cmd_read : READ fakeid fakeid var_int
-    '''
+    '''cmd_read : READ fakeid fakeid var_int'''
     p[0] = OperationNode(p[1], p[2:])
 
 
 def p_draw(p):
-    '''cmd_draw : DRAW draw_instruction
-    '''
+    '''cmd_draw : DRAW draw_instruction'''
     p[0] = OperationNode(p[1], p[2])
 
 
@@ -47,32 +44,27 @@ def p_draw_instruction(p):
 
 
 def p_drawflush(p):
-    '''cmd_drawflush : DRAWFLUSH fakeid
-    '''
+    '''cmd_drawflush : DRAWFLUSH fakeid'''
     p[0] = OperationNode(p[1], p[2:])
 
 
 def p_print(p):
-    '''cmd_print : PRINT value
-    '''
+    '''cmd_print : PRINT value'''
     p[0] = OperationNode(p[1], p[2:])
 
 
 def p_printflush(p):
-    '''cmd_printflush : PRINTFLUSH fakeid
-    '''
+    '''cmd_printflush : PRINTFLUSH fakeid'''
     p[0] = OperationNode(p[1], p[2:])
 
 
 def p_getlink(p):
-    '''cmd_getlink : GETLINK fakeid var_int
-    '''
+    '''cmd_getlink : GETLINK fakeid var_int'''
     p[0] = OperationNode(p[1], p[2:])
 
 
 def p_control(p):
-    '''cmd_control : CONTROL control_instruction
-    '''
+    '''cmd_control : CONTROL control_instruction'''
     p[0] = OperationNode(p[1], p[2])
 
 
@@ -87,8 +79,7 @@ def p_control_instruction(p):
 
 
 def p_radar(p):
-    '''cmd_radar : RADAR radar_target radar_target radar_target radar_sort fakeid var_int fakeid
-    '''
+    '''cmd_radar : RADAR radar_target radar_target radar_target radar_sort fakeid var_int fakeid'''
     p[0] = OperationNode(p[1], p[2:])
 
 
@@ -116,20 +107,17 @@ def p_radar_sort(p):
 
 
 def p_sensor(p):
-    '''cmd_sensor : SENSOR fakeid fakeid fakeid
-    '''
+    '''cmd_sensor : SENSOR fakeid fakeid fakeid'''
     p[0] = OperationNode(p[1], p[2:])
 
 
 def p_set(p):
-    '''cmd_set : SET fakeid value
-    '''
+    '''cmd_set : SET fakeid value'''
     p[0] = OperationNode(p[1], p[2:])
 
 
 def p_op(p):
-    '''cmd_op : OP op_instruction fakeid var_number var_number
-    '''
+    '''cmd_op : OP op_instruction fakeid var_number var_number'''
     p[0] = OperationNode(p[1], p[2:])
 
 
@@ -175,14 +163,12 @@ def p_op_instruction(p):
 
 
 def p_end(p):
-    '''cmd_end : END
-    '''
+    '''cmd_end : END'''
     p[0] = OperationNode(p[1])
 
 
 def p_jump(p):
-    '''cmd_jump : JUMP INT jump_comparison value value
-    '''
+    '''cmd_jump : JUMP INT jump_comparison value value'''
     p[0] = OperationNode(p[1], p[2:])
 
 
@@ -200,14 +186,12 @@ def p_jump_comparison(p):
 
 
 def p_ubind(p):
-    '''cmd_ubind : UBIND fakeid
-    '''
+    '''cmd_ubind : UBIND fakeid'''
     p[0] = OperationNode(p[1], p[2:])
 
 
 def p_ucontrol(p):
-    '''cmd_ucontrol : UCONTROL ucontrol_instruction
-    '''
+    '''cmd_ucontrol : UCONTROL ucontrol_instruction'''
     p[0] = OperationNode(p[1], p[2])
 
 
@@ -234,14 +218,12 @@ def p_ucontrol_instruction(p):
 
 
 def p_uradar(p):
-    '''cmd_uradar : URADAR radar_target radar_target radar_target radar_sort null var_bool fakeid
-    '''
+    '''cmd_uradar : URADAR radar_target radar_target radar_target radar_sort null var_bool fakeid'''
     p[0] = OperationNode(p[1], p[2:])
 
 
 def p_ulocate(p):
-    '''cmd_ulocate : ULOCATE ulocate_find ulocate_group var_bool fakeid var_number var_number var_bool fakeid
-    '''
+    '''cmd_ulocate : ULOCATE ulocate_find ulocate_group var_bool fakeid var_number var_number var_bool fakeid'''
     p[0] = OperationNode(p[1], p[2:])
 
 
@@ -270,8 +252,7 @@ def p_ulocate_group(p):
 
 
 def p_noop(p):
-    '''cmd_noop : NOOP
-    '''
+    '''cmd_noop : NOOP'''
     p[0] = OperationNode(p[1])
 
 
@@ -354,10 +335,12 @@ p_keyword.__doc__ = "keyword : " + "\n      | ".join([res for res in reserved.va
 
 
 FILENAME = "<undefined>"
+LINT = False
 
-def set_filename(filename):
-    global FILENAME
+def setup(filename, lint):
+    global FILENAME, LINT
     FILENAME = filename
+    LINT = lint
 
 
 def find_column(input, token):
@@ -370,8 +353,12 @@ def p_error(p):
     column = find_column(p.lexer.lexdata, p)
     msg = f"Syntax error! Error on token: {repr(p.value)}"
     form = "{path}:{line}:{column}: ({symbol}) {msg}"
-    print(form.format(path=FILENAME, line=p.lineno, column=column, symbol=p.type, msg=msg))
-    p.lexer.skip(1)
+    formatted = form.format(path=FILENAME, line=p.lineno, column=column, symbol=p.type, msg=msg)
+    if LINT:
+        print(formatted)
+        p.lexer.skip(1)
+    else:
+        raise Exception(formatted)
 
 
 parser = yacc.yacc()
@@ -379,8 +366,4 @@ parser = yacc.yacc()
 
 def do_parsing(text):
     result = parser.parse(text)
-    print(result)
-
-
-def do_linting(text):
-    parser.parse(text)
+    return result

@@ -6,6 +6,7 @@ ubind @flare
 jump 9 notEqual @unit null
 print "No units detected"
 printflush message
+# hallo
 end
 sensor f @unit @flag
 jump 4 notEqual f 0
@@ -25,6 +26,6 @@ ucontrol approach @thisx @thisy 5 0 0
 ulocate building storage false @copper outx outy found storage
 ucontrol itemDrop storage 1000 0 0 0
 end
-ulocate building core false @copper x y found core
+ulocate building core true @copper x y found core
 ucontrol approach x y 5 0 0
-ucontrol itemTake core item 20 0 0
+ucontrol itemTake core item 20 0.1 0.9

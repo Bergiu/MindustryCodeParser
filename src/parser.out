@@ -2,9 +2,9 @@ Created by PLY version 3.11 (http://www.dabeaz.com/ply)
 
 Grammar
 
-Rule 0     S' -> program
-Rule 1     program -> operation NEWLINE
-Rule 2     program -> program operation NEWLINE
+Rule 0     S' -> codeblock
+Rule 1     codeblock -> operation NEWLINE
+Rule 2     codeblock -> codeblock operation NEWLINE
 Rule 3     cmd_write -> WRITE value fakeid var_int
 Rule 4     cmd_read -> READ fakeid fakeid var_int
 Rule 5     cmd_draw -> DRAW draw_instruction
@@ -420,6 +420,7 @@ cmd_ucontrol         : 140
 cmd_ulocate          : 142
 cmd_uradar           : 141
 cmd_write            : 125
+codeblock            : 2 0
 control_instruction  : 20
 draw_instruction     : 5
 fakeid               : 3 4 4 15 16 18 19 21 22 23 23 24 24 26 26 40 40 40 41 42 89 98 99 100 100 105 105 106 106 108 109 109 144 146 150
@@ -429,7 +430,6 @@ null                 : 6 6 6 7 7 7 8 8 8 8 8 9 9 10 10 11 11 12 13 15 21 21 21 2
 number               : 147 152
 op_instruction       : 42
 operation            : 1 2
-program              : 2 0
 radar_sort           : 26 108
 radar_target         : 26 26 26 108 108 108
 ucontrol_instruction : 90
@@ -444,9 +444,9 @@ Parsing method: LALR
 
 state 0
 
-    (0) S' -> . program
-    (1) program -> . operation NEWLINE
-    (2) program -> . program operation NEWLINE
+    (0) S' -> . codeblock
+    (1) codeblock -> . operation NEWLINE
+    (2) codeblock -> . codeblock operation NEWLINE
     (125) operation -> . cmd_write
     (126) operation -> . cmd_read
     (127) operation -> . cmd_draw
@@ -506,7 +506,7 @@ state 0
     ULOCATE         shift and go to state 39
     NOOP            shift and go to state 40
 
-    program                        shift and go to state 1
+    codeblock                      shift and go to state 1
     operation                      shift and go to state 2
     cmd_write                      shift and go to state 3
     cmd_read                       shift and go to state 4
@@ -530,8 +530,8 @@ state 0
 
 state 1
 
-    (0) S' -> program .
-    (2) program -> program . operation NEWLINE
+    (0) S' -> codeblock .
+    (2) codeblock -> codeblock . operation NEWLINE
     (125) operation -> . cmd_write
     (126) operation -> . cmd_read
     (127) operation -> . cmd_draw
@@ -614,7 +614,7 @@ state 1
 
 state 2
 
-    (1) program -> operation . NEWLINE
+    (1) codeblock -> operation . NEWLINE
 
     NEWLINE         shift and go to state 42
 
@@ -3175,35 +3175,35 @@ state 40
 
 state 41
 
-    (2) program -> program operation . NEWLINE
+    (2) codeblock -> codeblock operation . NEWLINE
 
     NEWLINE         shift and go to state 262
 
 
 state 42
 
-    (1) program -> operation NEWLINE .
+    (1) codeblock -> operation NEWLINE .
 
-    WRITE           reduce using rule 1 (program -> operation NEWLINE .)
-    READ            reduce using rule 1 (program -> operation NEWLINE .)
-    DRAW            reduce using rule 1 (program -> operation NEWLINE .)
-    DRAWFLUSH       reduce using rule 1 (program -> operation NEWLINE .)
-    PRINT           reduce using rule 1 (program -> operation NEWLINE .)
-    PRINTFLUSH      reduce using rule 1 (program -> operation NEWLINE .)
-    GETLINK         reduce using rule 1 (program -> operation NEWLINE .)
-    CONTROL         reduce using rule 1 (program -> operation NEWLINE .)
-    RADAR           reduce using rule 1 (program -> operation NEWLINE .)
-    SENSOR          reduce using rule 1 (program -> operation NEWLINE .)
-    SET             reduce using rule 1 (program -> operation NEWLINE .)
-    OP              reduce using rule 1 (program -> operation NEWLINE .)
-    END             reduce using rule 1 (program -> operation NEWLINE .)
-    JUMP            reduce using rule 1 (program -> operation NEWLINE .)
-    UBIND           reduce using rule 1 (program -> operation NEWLINE .)
-    UCONTROL        reduce using rule 1 (program -> operation NEWLINE .)
-    URADAR          reduce using rule 1 (program -> operation NEWLINE .)
-    ULOCATE         reduce using rule 1 (program -> operation NEWLINE .)
-    NOOP            reduce using rule 1 (program -> operation NEWLINE .)
-    $end            reduce using rule 1 (program -> operation NEWLINE .)
+    WRITE           reduce using rule 1 (codeblock -> operation NEWLINE .)
+    READ            reduce using rule 1 (codeblock -> operation NEWLINE .)
+    DRAW            reduce using rule 1 (codeblock -> operation NEWLINE .)
+    DRAWFLUSH       reduce using rule 1 (codeblock -> operation NEWLINE .)
+    PRINT           reduce using rule 1 (codeblock -> operation NEWLINE .)
+    PRINTFLUSH      reduce using rule 1 (codeblock -> operation NEWLINE .)
+    GETLINK         reduce using rule 1 (codeblock -> operation NEWLINE .)
+    CONTROL         reduce using rule 1 (codeblock -> operation NEWLINE .)
+    RADAR           reduce using rule 1 (codeblock -> operation NEWLINE .)
+    SENSOR          reduce using rule 1 (codeblock -> operation NEWLINE .)
+    SET             reduce using rule 1 (codeblock -> operation NEWLINE .)
+    OP              reduce using rule 1 (codeblock -> operation NEWLINE .)
+    END             reduce using rule 1 (codeblock -> operation NEWLINE .)
+    JUMP            reduce using rule 1 (codeblock -> operation NEWLINE .)
+    UBIND           reduce using rule 1 (codeblock -> operation NEWLINE .)
+    UCONTROL        reduce using rule 1 (codeblock -> operation NEWLINE .)
+    URADAR          reduce using rule 1 (codeblock -> operation NEWLINE .)
+    ULOCATE         reduce using rule 1 (codeblock -> operation NEWLINE .)
+    NOOP            reduce using rule 1 (codeblock -> operation NEWLINE .)
+    $end            reduce using rule 1 (codeblock -> operation NEWLINE .)
 
 
 state 43
@@ -32591,28 +32591,28 @@ state 261
 
 state 262
 
-    (2) program -> program operation NEWLINE .
+    (2) codeblock -> codeblock operation NEWLINE .
 
-    WRITE           reduce using rule 2 (program -> program operation NEWLINE .)
-    READ            reduce using rule 2 (program -> program operation NEWLINE .)
-    DRAW            reduce using rule 2 (program -> program operation NEWLINE .)
-    DRAWFLUSH       reduce using rule 2 (program -> program operation NEWLINE .)
-    PRINT           reduce using rule 2 (program -> program operation NEWLINE .)
-    PRINTFLUSH      reduce using rule 2 (program -> program operation NEWLINE .)
-    GETLINK         reduce using rule 2 (program -> program operation NEWLINE .)
-    CONTROL         reduce using rule 2 (program -> program operation NEWLINE .)
-    RADAR           reduce using rule 2 (program -> program operation NEWLINE .)
-    SENSOR          reduce using rule 2 (program -> program operation NEWLINE .)
-    SET             reduce using rule 2 (program -> program operation NEWLINE .)
-    OP              reduce using rule 2 (program -> program operation NEWLINE .)
-    END             reduce using rule 2 (program -> program operation NEWLINE .)
-    JUMP            reduce using rule 2 (program -> program operation NEWLINE .)
-    UBIND           reduce using rule 2 (program -> program operation NEWLINE .)
-    UCONTROL        reduce using rule 2 (program -> program operation NEWLINE .)
-    URADAR          reduce using rule 2 (program -> program operation NEWLINE .)
-    ULOCATE         reduce using rule 2 (program -> program operation NEWLINE .)
-    NOOP            reduce using rule 2 (program -> program operation NEWLINE .)
-    $end            reduce using rule 2 (program -> program operation NEWLINE .)
+    WRITE           reduce using rule 2 (codeblock -> codeblock operation NEWLINE .)
+    READ            reduce using rule 2 (codeblock -> codeblock operation NEWLINE .)
+    DRAW            reduce using rule 2 (codeblock -> codeblock operation NEWLINE .)
+    DRAWFLUSH       reduce using rule 2 (codeblock -> codeblock operation NEWLINE .)
+    PRINT           reduce using rule 2 (codeblock -> codeblock operation NEWLINE .)
+    PRINTFLUSH      reduce using rule 2 (codeblock -> codeblock operation NEWLINE .)
+    GETLINK         reduce using rule 2 (codeblock -> codeblock operation NEWLINE .)
+    CONTROL         reduce using rule 2 (codeblock -> codeblock operation NEWLINE .)
+    RADAR           reduce using rule 2 (codeblock -> codeblock operation NEWLINE .)
+    SENSOR          reduce using rule 2 (codeblock -> codeblock operation NEWLINE .)
+    SET             reduce using rule 2 (codeblock -> codeblock operation NEWLINE .)
+    OP              reduce using rule 2 (codeblock -> codeblock operation NEWLINE .)
+    END             reduce using rule 2 (codeblock -> codeblock operation NEWLINE .)
+    JUMP            reduce using rule 2 (codeblock -> codeblock operation NEWLINE .)
+    UBIND           reduce using rule 2 (codeblock -> codeblock operation NEWLINE .)
+    UCONTROL        reduce using rule 2 (codeblock -> codeblock operation NEWLINE .)
+    URADAR          reduce using rule 2 (codeblock -> codeblock operation NEWLINE .)
+    ULOCATE         reduce using rule 2 (codeblock -> codeblock operation NEWLINE .)
+    NOOP            reduce using rule 2 (codeblock -> codeblock operation NEWLINE .)
+    $end            reduce using rule 2 (codeblock -> codeblock operation NEWLINE .)
 
 
 state 263

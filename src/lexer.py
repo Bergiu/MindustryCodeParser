@@ -218,10 +218,12 @@ def t_NEWLINE(t):
 
 
 FILENAME = "<undefined>"
+LINT = False
 
-def set_filename(filename):
-    global FILENAME
+def setup(filename, lint):
+    global FILENAME, LINT
     FILENAME = filename
+    LINT = lint
 
 
 def find_column(input, token):
@@ -235,8 +237,12 @@ def t_error(t):
     column = find_column(t.lexer.lexdata, t)
     msg = f"Illegal character: {repr(t.value[0])}"
     form = "{path}:{line}:{column}: ({symbol}) {msg}"
-    print(form.format(path=FILENAME, line=t.lineno, column=column, symbol=t.type, msg=msg))
-    t.lexer.skip(1)
+    formatted = form.format(path=FILENAME, line=t.lineno, column=column, symbol=t.type, msg=msg)
+    if LINT:
+        print(formatted)
+        t.lexer.skip(1)
+    else:
+        raise Exception(formatted)
 
 
 # Build the lexer
