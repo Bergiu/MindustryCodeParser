@@ -4,13 +4,28 @@ from .nodes import *
 
 
 def p_program1(p):
-    '''codeblock : operation NEWLINE'''
+    '''codeblock : line'''
     p[0] = CodeBlockNode(p[1])
 
 
 def p_program2(p):
-    '''codeblock : codeblock operation NEWLINE'''
+    '''codeblock : codeblock line'''
     p[0] = CodeBlockNode(p[2], p[1])
+
+
+def p_line1(p):
+    '''line : operation NEWLINE'''
+    p[0] = CodeBlockNode(p[1])
+
+
+def p_line2(p):
+    '''line : operation COMMENT NEWLINE'''
+    p[0] = CodeBlockNode(p[1], [p[2]])
+
+
+def p_line3(p):
+    '''line : COMMENT NEWLINE'''
+    p[0] = CodeBlockNode(p[1])
 
 
 def p_write(p):
@@ -350,15 +365,18 @@ def find_column(input, token):
 
 def p_error(p):
     global FILENAME
-    column = find_column(p.lexer.lexdata, p)
-    msg = f"Syntax error! Error on token: {repr(p.value)}"
-    form = "{path}:{line}:{column}: ({symbol}) {msg}"
-    formatted = form.format(path=FILENAME, line=p.lineno, column=column, symbol=p.type, msg=msg)
-    if LINT:
-        print(formatted)
-        p.lexer.skip(1)
+    if p is not None:
+        column = find_column(p.lexer.lexdata, p)
+        msg = f"Syntax error! Error on token: {repr(p.value)}"
+        form = "{path}:{line}:{column}: ({symbol}) {msg}"
+        formatted = form.format(path=FILENAME, line=p.lineno, column=column, symbol=p.type, msg=msg)
+        if LINT:
+            print(formatted)
+            p.lexer.skip(1)
+        else:
+            raise Exception(formatted)
     else:
-        raise Exception(formatted)
+        raise Exception("Error was raised, but p was none.")
 
 
 parser = yacc.yacc()
