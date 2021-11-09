@@ -1,16 +1,13 @@
-# This is a sample Python script.
+#!/bin/python3
 
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+from src.utils import load_code
+from src.parser import do_linting, set_filename as sfp
+from src.lexer import set_filename as sfl
 
-
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
-
-
-# Press the green button in the gutter to run the script.
 if __name__ == '__main__':
-    print_hi('PyCharm')
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+    import sys
+    filename = sys.argv[1]
+    text = load_code(filename)
+    sfl(filename)
+    sfp(filename)
+    do_linting(text)

@@ -1,6 +1,5 @@
 import ply.yacc as yacc
-from .utils import load_code
-from .lexer import tokens, reserved, do_lexing
+from .lexer import tokens, reserved
 from .nodes import *
 
 
@@ -354,9 +353,25 @@ def p_keyword(p):
 p_keyword.__doc__ = "keyword : " + "\n      | ".join([res for res in reserved.values()])
 
 
+FILENAME = "<undefined>"
+
+def set_filename(filename):
+    global FILENAME
+    FILENAME = filename
+
+
+def find_column(input, token):
+    line_start = input.rfind('\n', 0, token.lexpos) + 1
+    return (token.lexpos - line_start) + 1
+
+
 def p_error(p):
-    print("Syntax error in input!")
-    print(p)
+    global FILENAME
+    column = find_column(p.lexer.lexdata, p)
+    msg = f"Syntax error! Error on token: {repr(p.value)}"
+    form = "{path}:{line}:{column}: ({symbol}) {msg}"
+    print(form.format(path=FILENAME, line=p.lineno, column=column, symbol=p.type, msg=msg))
+    p.lexer.skip(1)
 
 
 parser = yacc.yacc()
@@ -367,7 +382,5 @@ def do_parsing(text):
     print(result)
 
 
-if __name__ == '__main__':
-    import sys
-    text = load_code(sys.argv[1])
-    do_parsing(text)
+def do_linting(text):
+    parser.parse(text)

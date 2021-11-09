@@ -186,10 +186,15 @@ def t_ID(t):
 
 
 # Regular expression rules for simple tokens
-t_STRING = r'".*"'
+t_STRING = r'".*?"'
 t_BOOL = r'"(true|false)"'
 
-t_ignore_COMMENT = r'\#.*'
+
+def t_COMMENT(t):
+    r'\#.*\n'
+    t.lexer.lineno += 1
+
+
 # A string containing ignored characters (spaces and tabs)
 t_ignore = ' \t'
 
@@ -212,9 +217,25 @@ def t_NEWLINE(t):
     return t
 
 
+FILENAME = "<undefined>"
+
+def set_filename(filename):
+    global FILENAME
+    FILENAME = filename
+
+
+def find_column(input, token):
+    line_start = input.rfind('\n', 0, token.lexpos) + 1
+    return (token.lexpos - line_start) + 1
+
+
 # Error handling rule
 def t_error(t):
-    print("Illegal character '%s'" % t.value[0])
+    global FILENAME
+    column = find_column(t.lexer.lexdata, t)
+    msg = f"Illegal character: {repr(t.value[0])}"
+    form = "{path}:{line}:{column}: ({symbol}) {msg}"
+    print(form.format(path=FILENAME, line=t.lineno, column=column, symbol=t.type, msg=msg))
     t.lexer.skip(1)
 
 
@@ -229,9 +250,3 @@ def do_lexing(data):
         if i is None:
             break
         print(i)
-
-
-if __name__ == '__main__':
-    import sys
-    text = load_code(sys.argv[1])
-    do_lexing(text)
