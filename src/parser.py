@@ -281,6 +281,11 @@ def p_noop(p):
     p[0] = OperationNode(p[1])
 
 
+def p_exec(p):
+    '''cmd_exec : EXEC ID'''
+    p[0] = ExecNode(p[2])
+
+
 def p_operation(p):
     '''operation : cmd_write
                  | cmd_read
@@ -302,6 +307,7 @@ def p_operation(p):
                  | cmd_ulocate
                  | cmd_noop
                  | cmd_function
+                 | cmd_exec
     '''
     p[0] = p[1]
 

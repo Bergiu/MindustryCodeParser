@@ -152,7 +152,7 @@ reserved_keys = [
     # 'while': 'WHILE',
     # 'define',
     'function',
-    # 'exec',
+    'exec',
 ]
 
 reserved_keys.extend(instruction_names)
