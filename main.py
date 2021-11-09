@@ -1,10 +1,11 @@
 #!/bin/python3
-
+from src.preprocessor import preprocess
 from src.utils import load_code, write_code
 from src.parser import setup as setupp, do_parsing
-from src.lexer import setup as setupl
+from src.lexer import setup as setupl, do_lexing
 
 import argparse
+
 
 def load_args():
     parser = argparse.ArgumentParser(description='Advanced Mindusty Logic Compiler.')
@@ -23,8 +24,9 @@ def setup(filename, lint):
 
 if __name__ == '__main__':
     args = load_args()
-    setup(args.filename, args.linter)
     text = load_code(args.filename)
+    text = preprocess(text, args.filename)
+    setup(args.filename, args.linter)
     out = do_parsing(text)
     if not args.linter:
         if args.outfile is not None:
