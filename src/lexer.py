@@ -150,9 +150,8 @@ reserved_keys = [
     # 'then': 'THEN',
     # 'else': 'ELSE',
     # 'while': 'WHILE',
-    # 'import',
     # 'define',
-    # 'function',
+    'function',
     # 'exec',
 ]
 
@@ -170,14 +169,16 @@ reserved = {res: res.upper() for res in reserved_keys}
 
 # List of token names.   This is always required
 tokens = [
-             'INT',
-             'DOUBLE',
-             'STRING',
-             'BOOL',
-             'NEWLINE',
-             'ID',
-             'COMMENT'
-         ] + list(reserved.values())
+    'INT',
+    'DOUBLE',
+    'STRING',
+    'BOOL',
+    'NEWLINE',
+    'ID',
+    'COMMENT',
+    'LCURLY',
+    'RCURLY',
+] + list(reserved.values())
 
 
 def t_ID(t):
@@ -189,6 +190,8 @@ def t_ID(t):
 # Regular expression rules for simple tokens
 t_STRING = r'".*?"'
 t_BOOL = r'"(true|false)"'
+t_LCURLY = r'{'
+t_RCURLY = r'}'
 
 
 def t_COMMENT(t):

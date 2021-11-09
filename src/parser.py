@@ -13,19 +13,29 @@ def p_program2(p):
     p[0] = CodeBlockNode(p[2], p[1])
 
 
+def p_curly(p):
+    '''cmd_function : FUNCTION ID LCURLY NEWLINE codeblock RCURLY'''
+    p[0] = FunctionNode(p[2], p[5])
+
+
 def p_line1(p):
     '''line : operation NEWLINE'''
-    p[0] = CodeBlockNode(p[1])
+    p[0] = p[1]
 
 
 def p_line2(p):
-    '''line : operation COMMENT NEWLINE'''
-    p[0] = CodeBlockNode(p[1], [p[2]])
+    '''line : operation comment NEWLINE'''
+    p[0] = OneLineNode(p[1], p[2])
 
 
 def p_line3(p):
-    '''line : COMMENT NEWLINE'''
-    p[0] = CodeBlockNode(p[1])
+    '''line : comment NEWLINE'''
+    p[0] = p[1]
+
+
+def p_comment(p):
+    '''comment : COMMENT'''
+    p[0] = CommentNode(p[1])
 
 
 def p_write(p):
@@ -291,6 +301,7 @@ def p_operation(p):
                  | cmd_uradar
                  | cmd_ulocate
                  | cmd_noop
+                 | cmd_function
     '''
     p[0] = p[1]
 

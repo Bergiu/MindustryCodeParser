@@ -27,9 +27,10 @@ if __name__ == '__main__':
     text = load_code(args.filename)
     text = preprocess(text, args.filename)
     setup(args.filename, args.linter)
+    # print(do_lexing(text))
     out = do_parsing(text)
     if not args.linter:
         if args.outfile is not None:
-            write_code(args.outfile, text)
+            write_code(args.outfile, out)
         else:
-            print(text)
+            print(out)
