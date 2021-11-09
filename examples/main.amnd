@@ -1,0 +1,13 @@
+# kommentar
+import units/all.amnd
+define MAX_SIZE 100
+define exec_move op add retptr @counter 1\nset @counter fn_move
+
+function hello_world {
+    print "Hello \nMAX_SIZE: "
+    print MAX_SIZE
+    printflush message1
+}
+
+exec_move
+exec fn_move
