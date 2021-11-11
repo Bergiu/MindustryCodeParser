@@ -6,16 +6,12 @@ For example examples/main.masm contains a command that is unknown to mindustry "
 
 # Install
 
-Download a release from github and extract it to `/opt/mindustry_parser/`. Then you can execute `/opt/mindustry_parser/main.py filename.masm` to check the file called `filename.masm`.
+Download a release from github and extract it to `/opt/MindustryParser/`. Then you can execute `/opt/MindustryParser/main.py filename.masm` to check the file called `filename.masm`.
 
 # NeoVim
 
 You can use this program as linter for neovim ale.
 
-Copy the file `vim/ale_linters/masm.vim` to `~/.config/nvim/ftdetect/masm.vim`.
+Copy the file `vim/ale_linters/mdc.vim` to `~/.config/nvim/ftdetect/mdc.vim`.
 
-Copy the file `vim/ftdetect/masm.vim` to `~/.config/nvim/ftdetect/masm.vim`.
-
-Copy `vim/syntax/masm.vim` to `~/.config/nvim/syntax/masm.vim`.
-
-This file is inspired by: https://github.com/purofle/vim-mindustry-logic
+You also need to install [vim-mindustry-logic syntax plugin](https://github.com/purofle/vim-mindustry-logic)
