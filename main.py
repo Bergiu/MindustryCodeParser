@@ -8,29 +8,20 @@ import argparse
 
 
 def load_args():
-    parser = argparse.ArgumentParser(description='Advanced Mindusty Logic Compiler.')
-    parser.add_argument('filename', type=str, help='The file that should be compiled.')
-    parser.add_argument('-o', dest='outfile', nargs="?", action='store',
-                        default=None, help='The output file.', type=str)
-    parser.add_argument('--linter', dest='linter', action='store_true',
-                        default=False, help='If only the linter should be run.')
+    parser = argparse.ArgumentParser(description='Mindusty Logic Parser.')
+    parser.add_argument('filename', type=str, help='The file that should be parsed.')
     return parser.parse_args()
 
 
-def setup(filename, lint):
-    setupl(filename, lint)
-    setupp(filename, lint)
+def setup(filename):
+    setupl(filename)
+    setupp(filename)
 
 
 if __name__ == '__main__':
     args = load_args()
     text = load_code(args.filename)
     text = preprocess(text, args.filename)
-    setup(args.filename, args.linter)
+    setup(args.filename)
     # print(do_lexing(text))
-    out = do_parsing(text)
-    if not args.linter:
-        if args.outfile is not None:
-            write_code(args.outfile, out)
-        else:
-            print(out)
+    do_parsing(text)

@@ -50,25 +50,6 @@ class OperationNode(Node):
         return out
 
 
-class FunctionNode(Node):
-    def __init__(self, function_name, code_block):
-        self.function_name = function_name
-        self.code_block = code_block
-
-    def loc(self):
-        return self.code_block.loc() + 4
-
-    def __repr__(self):
-        out = ""
-        lines = self.code_block.loc() + 2
-        out += f"op add {self.function_name} @counter 1\n"
-        out += f"op add @counter @counter {lines}\n"
-        out += f"set _{self.function_name}_retptr @counter\n"
-        out += str(self.code_block)
-        out += "set @counter retptr"
-        return out
-
-
 class CommentNode(Node):
     def __init__(self, comment):
         self.comment = comment
@@ -78,16 +59,3 @@ class CommentNode(Node):
 
     def loc(self):
         return 0
-
-
-class ExecNode(Node):
-    def __init__(self, fnptr):
-        self.fnptr = fnptr
-
-    def loc(self):
-        return 2
-
-    def __repr__(self):
-        out = "op add retptr @counter 1\n"
-        out += f"set @counter {self.fnptr}"
-        return out

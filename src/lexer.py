@@ -151,8 +151,8 @@ reserved_keys = [
     # 'else': 'ELSE',
     # 'while': 'WHILE',
     # 'define',
-    'function',
-    'exec',
+    # 'function',
+    # 'exec',
 ]
 
 reserved_keys.extend(instruction_names)
@@ -176,8 +176,6 @@ tokens = [
     'NEWLINE',
     'ID',
     'COMMENT',
-    'LCURLY',
-    'RCURLY',
 ] + list(reserved.values())
 
 
@@ -190,8 +188,6 @@ def t_ID(t):
 # Regular expression rules for simple tokens
 t_STRING = r'".*?"'
 t_BOOL = r'"(true|false)"'
-t_LCURLY = r'{'
-t_RCURLY = r'}'
 
 
 def t_COMMENT(t):
@@ -224,13 +220,11 @@ def t_NEWLINE(t):
 
 
 FILENAME = "<undefined>"
-LINT = False
 
 
-def setup(filename, lint):
-    global FILENAME, LINT
+def setup(filename):
+    global FILENAME
     FILENAME = filename
-    LINT = lint
 
 
 def find_column(input, token):
@@ -245,11 +239,8 @@ def t_error(t):
     msg = f"Illegal character: {repr(t.value[0])}"
     form = "{path}:{line}:{column}: ({symbol}) {msg}"
     formatted = form.format(path=FILENAME, line=t.lineno, column=column, symbol=t.type, msg=msg)
-    if LINT:
-        print(formatted)
-        t.lexer.skip(1)
-    else:
-        raise Exception(formatted)
+    print(formatted)
+    t.lexer.skip(1)
 
 
 # Build the lexer

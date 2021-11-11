@@ -13,11 +13,6 @@ def p_program2(p):
     p[0] = CodeBlockNode(p[2], p[1])
 
 
-def p_curly(p):
-    '''cmd_function : FUNCTION ID LCURLY NEWLINE codeblock RCURLY'''
-    p[0] = FunctionNode(p[2], p[5])
-
-
 def p_line1(p):
     '''line : operation NEWLINE'''
     p[0] = p[1]
@@ -281,11 +276,6 @@ def p_noop(p):
     p[0] = OperationNode(p[1])
 
 
-def p_exec(p):
-    '''cmd_exec : EXEC ID'''
-    p[0] = ExecNode(p[2])
-
-
 def p_operation(p):
     '''operation : cmd_write
                  | cmd_read
@@ -306,8 +296,6 @@ def p_operation(p):
                  | cmd_uradar
                  | cmd_ulocate
                  | cmd_noop
-                 | cmd_function
-                 | cmd_exec
     '''
     p[0] = p[1]
 
@@ -367,12 +355,11 @@ p_keyword.__doc__ = "keyword : " + "\n      | ".join([res for res in reserved.va
 
 
 FILENAME = "<undefined>"
-LINT = False
 
-def setup(filename, lint):
-    global FILENAME, LINT
+
+def setup(filename):
+    global FILENAME
     FILENAME = filename
-    LINT = lint
 
 
 def find_column(input, token):
@@ -387,11 +374,8 @@ def p_error(p):
         msg = f"Syntax error! Error on token: {repr(p.value)}"
         form = "{path}:{line}:{column}: ({symbol}) {msg}"
         formatted = form.format(path=FILENAME, line=p.lineno, column=column, symbol=p.type, msg=msg)
-        if LINT:
-            print(formatted)
-            p.lexer.skip(1)
-        else:
-            raise Exception(formatted)
+        print(formatted)
+        p.lexer.skip(1)
     else:
         raise Exception("Error was raised, but p was none.")
 
