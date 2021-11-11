@@ -192,7 +192,6 @@ t_BOOL = r'"(true|false)"'
 
 def t_COMMENT(t):
     r'\#.*'
-    t.lexer.lineno += 1
     return t
 
 
